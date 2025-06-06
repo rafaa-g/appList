@@ -1,0 +1,47 @@
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependências
+node_modules/
+venv/
+.env/
+
+# Builds
+dist/
+build/
+out/
+coverage/
+
+# IDEs e editores
+.vscode/
+.idea/
+*.sw?
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Pycache
+__pycache__/
+*.py[cod]
+
+# Banco de dados local
+*.sqlite3
+
+# Arquivos de configuração locais
+.env.local
+.env.*.local
+
+# Outros exemplos
+*.pid
+*.seed

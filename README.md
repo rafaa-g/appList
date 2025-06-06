@@ -1,2 +1,3 @@
 # appList
-aplicativo de anotaçoes diarias
+aplicativo de anotaçoes diarias - backend
+
