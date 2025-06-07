@@ -17,6 +17,30 @@ const createUser = async (req, res) => {
     }
 }
 
+const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        
+        const token = await userService.loginUser(email, password);
+        res.status(200).json({
+            result: 'Login success',
+            token: token
+        })
+
+    } catch (error) {
+        if (error.message === 'USER_NOT_FOUND') {
+            return res.status(404).json({ error: 'Usuário ou senha incorreta' });
+        }  
+        if (error.message === 'INVALID_PASSWORD') {
+            return res.status(404).json({ error: 'Usuário ou senha incorreta' });
+        }
+
+        res.status(500).json({ error: 'Erro ao fazer login.' });
+    }
+}
+
 module.exports = {
     createUser,
+    loginUser,
 };
