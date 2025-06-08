@@ -20,7 +20,19 @@ const findTasksByUserId = async (userId) => {
     });
 };
 
+const completeTaskByTaskId = async (taskId) => {
+    return await prisma.task.update({
+        where: {
+            id: taskId
+        },
+        data: {
+            completed: true
+        }
+    });
+}; 
+
 module.exports = {
     createTask,
     findTasksByUserId,
+    completeTaskByTaskId,
 }

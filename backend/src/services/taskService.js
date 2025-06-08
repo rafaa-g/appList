@@ -11,7 +11,12 @@ const findTasksByUserId = async (userId) => {
     return await taskRepository.findTasksByUserId(userId);
 }
 
+const completeTaskByTaskId = async (taskId) => {
+    return await taskRepository.completeTaskByTaskId(taskId);
+}
+
 module.exports = {
     createTask,
-    findTasksByUserId
+    findTasksByUserId,
+    completeTaskByTaskId,
 }

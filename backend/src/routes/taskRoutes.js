@@ -5,5 +5,6 @@ const auth = require('../middleware/auth');
 
 router.post('/create-task', auth, taskController.createTask);
 router.get('/tasks-by-userid', auth, taskController.findTasksByUserId);
+router.get('/complete-task-by-taskid', auth, taskController.completeTaskByTaskId);
 
 module.exports = router;

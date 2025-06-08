@@ -12,21 +12,33 @@ const createTask = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: 'Internal server error'})
     }
-}
+};
 
 const findTasksByUserId = async (req, res) => {
     const userId = req.userId
     try {
         
         const tasks = await taskService.findTasksByUserId(userId);
-        res.status(200).json({message: 'Tasks', tasks});
+        res.status(200).json(tasks);
 
     } catch (error) {
         res.status(500).json({error: 'Internal server error'})
     }
-}
+};
+
+const completeTaskByTaskId = async (req, res) => {
+    const taskId = req.body.id;
+    console.log(taskId)
+    try {
+        const task = await taskService.completeTaskByTaskId(taskId);
+        res.status(201).json({message:'Task updated successfully', task})
+    } catch (error) {
+        res.status(500).json({error: 'Internal server error'})
+    }
+};
 
 module.exports = {
     createTask,
     findTasksByUserId,
-}
+    completeTaskByTaskId,
+};
