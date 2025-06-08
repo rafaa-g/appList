@@ -1,26 +1,39 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import List from '../pages/list';
 import User from '../pages/user';
+import NewList from '../pages/newList';
 import CustomTabBar from '../components/CustomTabBar';
-import { AuthProviderList } from '../context/authContext_list';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function BottomRoutes(){
-    return(
-        <AuthProviderList>
-            <Tab.Navigator
-                screenOptions={{
-                    headerShown:false
-                }} 
-                tabBar={(props) => <CustomTabBar {...props} />}
-
-            >
-                <Tab.Screen name="List" component={List} />
-                <Tab.Screen name="User" component={User} />
-            </Tab.Navigator>
-        </AuthProviderList>
-    )
+function MainStack() {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
+            <Stack.Screen name="List" component={List} />
+            <Stack.Screen name="NewList" component={NewList} />
+        </Stack.Navigator>
+    );
 }
 
-  
+export default function BottomRoutes() {
+    return (
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+            tabBar={(props) => <CustomTabBar {...props} />}
+        >
+            <Tab.Screen 
+                name="MainStack" 
+                component={MainStack}
+            />
+            <Tab.Screen name="User" component={User} />
+        </Tab.Navigator>
+    )
+}

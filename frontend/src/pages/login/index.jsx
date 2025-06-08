@@ -21,8 +21,6 @@ export default function Login () {
 
             navigation.reset({routes:[{name:"BottomRoutes"}]})
 
-            Alert.alert('Logado com sucesso!')
-
         } catch (error) {
             console.log(error)
         }

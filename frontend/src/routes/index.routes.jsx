@@ -24,6 +24,7 @@ export default function Routes (){
                 name="BottomRoutes"
                 component={BottomRoutes}
             />
+            
         </Stack.Navigator>
     )
 }

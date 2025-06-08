@@ -1,0 +1,102 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { styles } from './styles';
+import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { themas } from '../../global/themes';
+
+export default function NewList({ navigation }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [isUrgent, setIsUrgent] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const handleSave = () => {
+    console.log({ title, description, isUrgent, date });
+    navigation.goBack();
+  };
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.header}>Nova Nota</Text>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Título</Text>
+        <TextInput
+          style={styles.titleInput}
+          placeholder="Digite o título"
+          value={title}
+          onChangeText={setTitle}
+          maxLength={50}
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Descrição</Text>
+        <TextInput
+          style={styles.descriptionInput}
+          placeholder="Descreva sua nota..."
+          value={description}
+          onChangeText={setDescription}
+          multiline
+          numberOfLines={4}
+        />
+      </View>
+
+      <View style={styles.flagContainer}>
+        <Text style={styles.label}>Prioridade</Text>
+        <View style={styles.flagOptions}>
+          <TouchableOpacity 
+            style={[styles.flagButton, isUrgent && styles.urgentFlag]}
+            onPress={() => setIsUrgent(true)}
+          >
+            <FontAwesome name="flag" size={20} color="#FFF" />
+            <Text style={styles.flagText}>Urgente</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.flagButton, !isUrgent && styles.normalFlag]}
+            onPress={() => setIsUrgent(false)}
+          >
+            <FontAwesome name="flag" size={20} color="#FFF" />
+            <Text style={styles.flagText}>Normal</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Data de Validade</Text>
+        <TouchableOpacity 
+          style={styles.dateInput}
+          onPress={() => setShowDatePicker(true)}
+        >
+          <Text style={styles.dateText}>
+            {date.toLocaleDateString('pt-BR')}
+          </Text>
+          <MaterialIcons name="calendar-today" size={20} color={themas.colors.primary} />
+        </TouchableOpacity>
+      </View>
+
+      {showDatePicker && (
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onChangeDate}
+          minimumDate={new Date()}
+        />
+      )}
+
+      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>Salvar Lista</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+}
