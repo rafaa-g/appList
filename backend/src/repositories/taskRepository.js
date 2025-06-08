@@ -12,6 +12,15 @@ const createTask = async (title, description, dueDate, userId) => {
     });
 };
 
+const findTasksByUserId = async (userId) => {
+    return await prisma.task.findMany({
+        where: {
+            userId,
+        },
+    });
+};
+
 module.exports = {
     createTask,
+    findTasksByUserId,
 }

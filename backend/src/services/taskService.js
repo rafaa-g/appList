@@ -7,6 +7,11 @@ const createTask = async (title, description, dueDate, userId) => {
     return await taskRepository.createTask(title, description, FormattedDueDate, userId)
 }
 
+const findTasksByUserId = async (userId) => {
+    return await taskRepository.findTasksByUserId(userId);
+}
+
 module.exports = {
-    createTask
-};
+    createTask,
+    findTasksByUserId
+}
