@@ -54,5 +54,17 @@ export const style= StyleSheet.create({
    },
    descriptionCard:{
       color:themas.colors.gray
-   }
+   },
+   searchInput: {
+    flex: 1,
+    height: '100%',
+    paddingHorizontal: 10,
+    color: themas.colors.dark
+   },
+   noResultsText: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: themas.colors.gray,
+    fontSize: 16,
+   },
 })

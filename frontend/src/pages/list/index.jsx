@@ -1,56 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, Touchable, TouchableOpacity, View } from "react-native";
 import { style } from "./styles";
 import { Input } from "../../components/Input";
 import { MaterialIcons } from '@expo/vector-icons';
 import { FlatList } from "react-native-gesture-handler";
 import { Ball } from "../../components/Ball";
-import { Flag } from "../../components/Flag";
 import { themas } from "../../global/themes";
 
-const data = [
+const initialData = [
     {
-      item: 0,
+      id: 0,
       title: 'Realizar a lição de casa!',
       description: 'página 10 a 20',
-      flag: 'urgente'
     },
     {
-      item: 1,
+      id: 1,
       title: 'Passear com cachorro!',
       description: 'página 10 a 20',
-      flag: 'urgente'
     },
     {
-      item: 2,
+      id: 2,
       title: 'Sair para tomar açaí!',
       description: 'página 10 a 20',
-      flag: 'urgente'
     }
-  ];
-  
-  const _renderCard = (item) => {
-    return (
-        <TouchableOpacity style={style.card}>
-            <View style={style.rowCard}>
-                <View style={style.rowCardLeft}>
-                    <Ball color='red'/>
-                    <View>
-                        <Text style={style.titleCard}>{item.title}</Text>
-                        <Text style={style.descriptionCard}>{item.description}</Text>
+];
+
+export default function List({ route }) {
+    const [data, setData] = useState(initialData);
+    
+    React.useEffect(() => {
+        if (route.params?.newNote) {
+            setData(prevData => [
+                ...prevData,
+                {
+                    id: prevData.length,
+                    title: route.params.newNote.title,
+                    description: route.params.newNote.description,
+                }
+            ]);
+        }
+    }, [route.params?.newNote]);
+
+    const _renderCard = (item) => {
+        return (
+            <TouchableOpacity style={style.card}>
+                <View style={style.rowCard}>
+                    <View style={style.rowCardLeft}>
+                        <Ball color='gray'/>
+                        <View>
+                            <Text style={style.titleCard}>{item.title}</Text>
+                            <Text style={style.descriptionCard}>{item.description}</Text>
+                        </View>
                     </View>
                 </View>
-                <Flag caption="Urgent" color={themas.colors.red}/>
-            </View>
-        </TouchableOpacity>
-    )
-  }
+            </TouchableOpacity>
+        )
+    }
 
-export default function List (){
     return(
         <View style={style.container}>
             <View style={style.header}>
-                <Text style={style.greeting}>Hi Rafael, shall we take notes?</Text>
+                <Text style={style.greeting}>Olá Rafael, alguma nota hoje?</Text>
                 <View style={style.boxInput}>
                     <Input 
                         IconLeft={MaterialIcons}
@@ -62,10 +72,8 @@ export default function List (){
                 <FlatList 
                     data={data}
                     style={{marginTop:40, paddingHorizontal:30}}
-                    keyExtractor={(item, index) =>item.item}
-                    renderItem={({item, index}) => {
-                        return (_renderCard(item))
-                    }}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({item}) => _renderCard(item)}
                 />
             </View>
         </View>

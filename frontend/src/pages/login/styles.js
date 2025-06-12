@@ -23,8 +23,7 @@ export const style = StyleSheet.create({
         height:Dimensions.get('window').height/3,
         width:'100%',
         alignItems:'center',
-        justifyContent:'flex-start'
-        
+        justifyContent:'flex-start',
     },
     boxInput:{
         width:'100%',

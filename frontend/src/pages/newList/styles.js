@@ -42,33 +42,6 @@ export const styles = StyleSheet.create({
     height: 120,
     textAlignVertical: 'top',
   },
-  flagContainer: {
-    marginBottom: 25,
-  },
-  flagOptions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  flagButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    width: '48%',
-    justifyContent: 'center',
-  },
-  urgentFlag: {
-    backgroundColor: '#FF3B30',
-  },
-  normalFlag: {
-    backgroundColor: '#007AFF',
-  },
-  flagText: {
-    color: '#FFF',
-    marginLeft: 8,
-    fontWeight: 'bold',
-  },
   dateInput: {
     backgroundColor: '#F5F5F5',
     borderRadius: 8,

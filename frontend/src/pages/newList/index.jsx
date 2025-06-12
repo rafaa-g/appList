@@ -8,13 +8,22 @@ import { themas } from '../../global/themes';
 export default function NewList({ navigation }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [isUrgent, setIsUrgent] = useState(false);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleSave = () => {
-    console.log({ title, description, isUrgent, date });
-    navigation.goBack();
+    if (title.trim() === '' || description.trim() === '') {
+      alert('Por favor, preencha todos os campos');
+      return;
+    }
+    
+    navigation.navigate('List', { 
+      newNote: { 
+        title, 
+        description,
+        date: date.toISOString() 
+      } 
+    });
   };
 
   const onChangeDate = (event, selectedDate) => {
@@ -50,27 +59,6 @@ export default function NewList({ navigation }) {
         />
       </View>
 
-      <View style={styles.flagContainer}>
-        <Text style={styles.label}>Prioridade</Text>
-        <View style={styles.flagOptions}>
-          <TouchableOpacity 
-            style={[styles.flagButton, isUrgent && styles.urgentFlag]}
-            onPress={() => setIsUrgent(true)}
-          >
-            <FontAwesome name="flag" size={20} color="#FFF" />
-            <Text style={styles.flagText}>Urgente</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.flagButton, !isUrgent && styles.normalFlag]}
-            onPress={() => setIsUrgent(false)}
-          >
-            <FontAwesome name="flag" size={20} color="#FFF" />
-            <Text style={styles.flagText}>Normal</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Data de Validade</Text>
         <TouchableOpacity 
@@ -95,7 +83,7 @@ export default function NewList({ navigation }) {
       )}
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>Salvar Lista</Text>
+        <Text style={styles.saveButtonText}>Salvar nota</Text>
       </TouchableOpacity>
     </ScrollView>
   );

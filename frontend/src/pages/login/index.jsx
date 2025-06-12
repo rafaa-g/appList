@@ -4,10 +4,9 @@ import { style } from "./styles";
 import checkLogo from '../../assets/checkLogo.png'
 import {MaterialIcons, AntDesign} from '@expo/vector-icons';
 import { themas } from "../../global/themes";
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Login () {
-
     const navigation = useNavigation();
     
     const [email, setEmail] = useState('');
@@ -43,6 +42,7 @@ export default function Login () {
                         style={style.input}
                         value={email}
                         onChangeText={setEmail}
+                        keyboardType="email-address"
                     />
                     <MaterialIcons
                         name='email'
@@ -56,17 +56,31 @@ export default function Login () {
                         style={style.input}
                         value={password}
                         onChangeText={setPassword}
+                        secureTextEntry
                     />
                     <MaterialIcons
-                        name='remove-red-eye'
+                        name='lock'
                         size={20}
                         color={themas.colors.gray}
                     />
                 </View>
             </View>
             <View style={style.boxBottom}>
-                <TouchableOpacity style={style.button} onPress={()=>getLogin()}>
+                <TouchableOpacity style={style.button} onPress={getLogin}>
                     <Text style={style.textButton}>ENTRAR</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                    style={{ marginTop: 20 }}
+                    onPress={() => navigation.navigate('Register')}
+                >
+                    <Text style={{ 
+                        color: themas.colors.primary,
+                        textAlign: 'center',
+                        textDecorationLine: 'underline'
+                    }}>
+                        Ainda não tem uma conta? Registre-se
+                    </Text>
                 </TouchableOpacity>
             </View>
         </View>
