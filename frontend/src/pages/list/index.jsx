@@ -1,61 +1,82 @@
 import React, { useState } from "react";
-import { Text, Touchable, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, Alert } from "react-native";
 import { style } from "./styles";
 import { Input } from "../../components/Input";
 import { MaterialIcons } from '@expo/vector-icons';
 import { FlatList } from "react-native-gesture-handler";
-import { Ball } from "../../components/Ball";
+import { DeleteIcon } from "../../components/DeleteIcon";
 import { themas } from "../../global/themes";
-
-const initialData = [
-    {
-      id: 0,
-      title: 'Realizar a lição de casa!',
-      description: 'página 10 a 20',
-    },
-    {
-      id: 1,
-      title: 'Passear com cachorro!',
-      description: 'página 10 a 20',
-    },
-    {
-      id: 2,
-      title: 'Sair para tomar açaí!',
-      description: 'página 10 a 20',
-    }
-];
+import { useNavigation } from '@react-navigation/native';
 
 export default function List({ route }) {
-    const [data, setData] = useState(initialData);
+    const navigation = useNavigation();
+    const [data, setData] = useState([]);
     
-    React.useEffect(() => {
+     React.useEffect(() => {
         if (route.params?.newNote) {
             setData(prevData => [
                 ...prevData,
                 {
-                    id: prevData.length,
+                    id: Date.now(), 
                     title: route.params.newNote.title,
                     description: route.params.newNote.description,
+                    date: new Date().toLocaleDateString('pt-BR') 
                 }
             ]);
         }
     }, [route.params?.newNote]);
 
+    
+    const handleTaskPress = (task) => {
+    navigation.navigate('Edit', { 
+        task,
+        onSave: (updatedTask) => {
+            setData(data.map(item => 
+                item.id === updatedTask.id ? updatedTask : item
+            ));
+        }
+    });
+};
+
+    const handleDelete = (id) => {
+    Alert.alert(
+        "Confirmar exclusão",
+        "Tem certeza que deseja excluir esta tarefa?",
+        [
+            { text: "Cancelar", style: "cancel" },
+            { 
+                text: "Excluir", 
+                onPress: () => setData(data.filter(item => item.id !== id))
+            }
+        ]
+    );
+};
+
     const _renderCard = (item) => {
-        return (
-            <TouchableOpacity style={style.card}>
+    return (
+        <View style={style.card}>
+            <DeleteIcon onPress={() => handleDelete(item.id)} />
+            
+            <TouchableOpacity 
+                style={style.contentButton}
+                onPress={() => handleTaskPress(item)}
+            >
                 <View style={style.rowCard}>
-                    <View style={style.rowCardLeft}>
-                        <Ball color='gray'/>
-                        <View>
-                            <Text style={style.titleCard}>{item.title}</Text>
-                            <Text style={style.descriptionCard}>{item.description}</Text>
-                        </View>
+                    <View style={style.textContainer}>
+                        <Text style={style.titleCard}>{item.title}</Text>
+                        <Text style={style.descriptionCard}>{item.description}</Text>
+                        <Text style={style.dateCard}>{item.date}</Text>
                     </View>
+                    <MaterialIcons
+                        name="chevron-right"
+                        size={24}
+                        color={themas.colors.gray}
+                    />
                 </View>
             </TouchableOpacity>
-        )
-    }
+        </View>
+    )
+}
 
     return(
         <View style={style.container}>
@@ -74,6 +95,9 @@ export default function List({ route }) {
                     style={{marginTop:40, paddingHorizontal:30}}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => _renderCard(item)}
+                    ListEmptyComponent={
+                        <Text style={style.emptyText}>Nenhuma tarefa cadastrada</Text>
+                    }
                 />
             </View>
         </View>

@@ -1,4 +1,3 @@
-// src/pages/register.js
 import React, { useState } from "react";
 import { Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { styles } from "./styles";
@@ -15,20 +14,25 @@ export default function Register() {
     const [password, setPassword] = useState('');
 
     function handleRegister() {
-        try {
-            if (!name || !email || !password) {
-                return Alert.alert('Atenção', 'Preencha todos os campos!');
-            }
-
-            // Aqui você normalmente faria a chamada à API para registrar o usuário
-            // Após o registro bem-sucedido, redireciona para a tela principal
-            navigation.reset({ routes: [{ name: "BottomRoutes" }] });
-            
-        } catch (error) {
-            console.log(error);
-            Alert.alert('Erro', 'Não foi possível realizar o cadastro');
+    try {
+        if (!name || !email || !password) {
+            return Alert.alert('Atenção', 'Preencha todos os campos!');
         }
+
+        navigation.reset({ 
+            routes: [{ 
+                name: "BottomRoutes", 
+                params: { 
+                    user: {name, email} 
+                } 
+            }] 
+        });
+        
+    } catch (error) {
+        console.log(error);
+        Alert.alert('Erro', 'Não foi possível realizar o cadastro');
     }
+}
 
     return (
         <View style={styles.container}>
