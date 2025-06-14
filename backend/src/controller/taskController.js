@@ -28,7 +28,6 @@ const findTasksByUserId = async (req, res) => {
 
 const completeTaskByTaskId = async (req, res) => {
     const taskId = req.body.id;
-    console.log(taskId)
     try {
         const task = await taskService.completeTaskByTaskId(taskId);
         res.status(201).json({message:'Task updated successfully', task})
