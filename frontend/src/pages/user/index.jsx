@@ -9,7 +9,6 @@ export default function User() {
     const navigation = useNavigation();
     const route = useRoute();
     
-    // Padronize para usar route.params.user
     const userData = route.params?.user || { 
         name: 'Usuário', 
         email: 'email@exemplo.com' 

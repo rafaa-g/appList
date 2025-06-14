@@ -11,35 +11,62 @@ export const style = StyleSheet.create({
         height: Dimensions.get('window').height/6,
         paddingHorizontal: 20,
         justifyContent: 'center',
-        backgroundColor: themas.colors.primary
+        backgroundColor: themas.colors.primary,
+        paddingTop: 7
     },
     greeting: {
         fontWeight: 'bold',
         fontSize: 20,
         color: themas.colors.secundary,
-        marginTop: 20
+        marginTop: 20,
+        marginBottom: 15
     },
-    boxInput: {
-        width: '80%'
+    searchContainer: {
+        width: '100%',
+        paddingHorizontal: 20,
+    },
+    searchBox: {
+        width: '100%',
+        height: 40,
+        backgroundColor: themas.colors.secundary,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: themas.colors.lightGray,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 15,
+    },
+    searchInput: {
+        flex: 1,
+        height: '100%',
+        paddingLeft: 10,
+        color: themas.colors.dark,
+        includeFontPadding: false,
+        textAlignVertical: 'center',
+    },
+    searchIcon: {
+        marginRight: 8,
     },
     boxList: {
         flex: 1,
         width: '100%',
     },
+    list: {
+        marginTop: 20,
+        paddingHorizontal: 20
+    },
     card: {
-    width: '100%',
-    minHeight: 80,
-    backgroundColor: themas.colors.secundary,
-    marginTop: 6,
-    borderRadius: 10,
-    padding: 15,
-    paddingRight: 10,
-    borderWidth: 1,
-    borderColor: themas.colors.lightGray,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-},
+        width: '100%',
+        minHeight: 80,
+        backgroundColor: themas.colors.secundary,
+        marginTop: 10,
+        borderRadius: 10,
+        padding: 15,
+        borderWidth: 1,
+        borderColor: themas.colors.lightGray,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     contentButton: {
         flex: 1
     },
@@ -73,11 +100,5 @@ export const style = StyleSheet.create({
         marginTop: 20,
         color: themas.colors.gray,
         fontSize: 16,
-    },
-    searchInput: {
-        flex: 1,
-        height: '100%',
-        paddingHorizontal: 10,
-        color: themas.colors.dark
     }
 });
