@@ -1,4 +1,5 @@
 import api from './api'; // Importe sua instância do axios
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const loginService = async (email, password) => {
   try {
@@ -8,6 +9,8 @@ export const loginService = async (email, password) => {
 
     const response = await api.post('/user/login', { email, password });
     const { token } = response.data  
+
+    await AsyncStorage.setItem('token', token);
 
     return token;
 

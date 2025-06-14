@@ -8,9 +8,11 @@ export const style = StyleSheet.create({
     },
     header: {
         width: '100%',
-        height: Dimensions.get('window').height/6,
+        height: Dimensions.get('window').height/7,
         paddingHorizontal: 20,
         justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
         backgroundColor: themas.colors.primary,
         paddingTop: 7
     },
@@ -24,6 +26,7 @@ export const style = StyleSheet.create({
     searchContainer: {
         width: '100%',
         paddingHorizontal: 20,
+        marginTop: 20
     },
     searchBox: {
         width: '100%',

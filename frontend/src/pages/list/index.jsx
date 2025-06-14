@@ -5,64 +5,83 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { FlatList } from "react-native-gesture-handler";
 import { DeleteIcon } from "../../components/DeleteIcon";
 import { themas } from "../../global/themes";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { 
+  getTasksService, 
+  createTaskService, 
+  updateTaskService, 
+  deleteTaskService 
+} from '../../services/task';
 
-export default function List({ route }) {
-    const navigation = useNavigation();
-    const [data, setData] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredData, setFilteredData] = useState([]);
+export default function List() {
+  const navigation = useNavigation();
+  const [tasks, setTasks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredTasks, setFilteredTasks] = useState([]);
 
-    useEffect(() => {
-        if (route.params?.newNote) {
-            setData(prevData => [
-                ...prevData,
-                {
-                    id: Date.now(), 
-                    title: route.params.newNote.title,
-                    description: route.params.newNote.description,
-                    date: new Date().toLocaleDateString('pt-BR') 
-                }
-            ]);
+  // Carrega tarefas ao focar na tela
+  useFocusEffect(
+    React.useCallback(() => {
+      loadTasks();
+    }, [])
+  );
+
+  const loadTasks = async () => {
+    try {
+      const tasksData = await getTasksService();
+      setTasks(tasksData);
+    } catch (error) {
+      Alert.alert('Erro', error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredTasks(tasks);
+    } else {
+      const filtered = tasks.filter(item => 
+        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredTasks(filtered);
+    }
+  }, [searchTerm, tasks]);
+
+  const handleTaskPress = (task) => {
+    navigation.navigate('Edit', { 
+      task,
+      onSave: async (updatedTask) => {
+        try {
+          await updateTaskService(updatedTask.id, updatedTask);
+          loadTasks();
+        } catch (error) {
+          Alert.alert('Erro', error.message);
         }
-    }, [route.params?.newNote]);
+      }
+    });
+  };
 
-    useEffect(() => {
-        if (searchTerm.trim() === '') {
-            setFilteredData(data);
-        } else {
-            const filtered = data.filter(item => 
-                item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.description.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setFilteredData(filtered);
-        }
-    }, [searchTerm, data]);
-
-    const handleTaskPress = (task) => {
-        navigation.navigate('Edit', { 
-            task,
-            onSave: (updatedTask) => {
-                setData(data.map(item => 
-                    item.id === updatedTask.id ? updatedTask : item
-                ));
+  const handleDelete = (id) => {
+    Alert.alert(
+      "Confirmar exclusão",
+      "Tem certeza que deseja excluir esta tarefa?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        { 
+          text: "Excluir", 
+          onPress: async () => {
+            try {
+              await deleteTaskService(id);
+              setTasks(tasks.filter(item => item.id !== id));
+            } catch (error) {
+              Alert.alert('Erro', error.message);
             }
-        });
-    };
-
-    const handleDelete = (id) => {
-        Alert.alert(
-            "Confirmar exclusão",
-            "Tem certeza que deseja excluir esta tarefa?",
-            [
-                { text: "Cancelar", style: "cancel" },
-                { 
-                    text: "Excluir", 
-                    onPress: () => setData(data.filter(item => item.id !== id))
-                }
-            ]
-        );
-    };
+          }
+        }
+      ]
+    );
+  };
 
     const _renderCard = (item) => {
         return (
@@ -93,7 +112,6 @@ export default function List({ route }) {
     return(
         <View style={style.container}>
             <View style={style.header}>
-                <Text style={style.greeting}>Olá Rafael, alguma nota hoje?</Text>
                 <View style={style.searchContainer}>
                     <View style={style.searchBox}>
                         <MaterialIcons
@@ -106,7 +124,7 @@ export default function List({ route }) {
                             style={style.searchInput}
                             value={searchTerm}
                             onChangeText={setSearchTerm}
-                            placeholder="Buscar notas..."
+                            placeholder="Buscar tarefas..."
                             placeholderTextColor={themas.colors.gray}
                         />
                     </View>
@@ -114,7 +132,7 @@ export default function List({ route }) {
             </View>
             <View style={style.boxList}>
                 <FlatList 
-                    data={filteredData}
+                    data={filteredTasks}
                     style={style.list}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => _renderCard(item)}
