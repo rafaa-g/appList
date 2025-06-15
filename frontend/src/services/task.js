@@ -41,7 +41,7 @@ export const updateTaskService = async (id, task) => {
 export const deleteTaskService = async (id) => {
   try {
     const token = await AsyncStorage.getItem('token');
-    await api.delete(`/tasks/${id}`, {
+    await api.delete(`/tasks/delete-task-by-taskid/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
   } catch (error) {
