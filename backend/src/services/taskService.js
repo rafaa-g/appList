@@ -15,8 +15,13 @@ const completeTaskByTaskId = async (taskId) => {
     return await taskRepository.completeTaskByTaskId(taskId);
 }
 
+const deleteTaskByTaskId = async (taskId) => {
+    return await taskRepository.deleteTaskByTaskId(taskId);
+}
+
 module.exports = {
     createTask,
     findTasksByUserId,
     completeTaskByTaskId,
+    deleteTaskByTaskId
 }

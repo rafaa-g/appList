@@ -36,8 +36,22 @@ const completeTaskByTaskId = async (req, res) => {
     }
 };
 
+const deleteTaskByTaskId = async (req, res) => {
+    const taskId = req.params.id;
+    if (!taskId) {
+        return res.status(400).json({error: 'Task ID is required'});
+    }
+    try {
+        const task = await taskService.deleteTaskByTaskId(taskId);
+        res.status(201).json({message:'Task deleted successfully', task})
+    } catch (error) {
+        res.status(500).json({error: 'Internal server error'})
+    }
+};
+
 module.exports = {
     createTask,
     findTasksByUserId,
     completeTaskByTaskId,
+    deleteTaskByTaskId
 };

@@ -31,8 +31,17 @@ const completeTaskByTaskId = async (taskId) => {
     });
 }; 
 
+const deleteTaskByTaskId = async (taskId) => {
+    return await prisma.task.delete({
+        where: {
+            id: taskId
+        }
+    });
+};
+
 module.exports = {
     createTask,
     findTasksByUserId,
     completeTaskByTaskId,
-}
+    deleteTaskByTaskId
+};
