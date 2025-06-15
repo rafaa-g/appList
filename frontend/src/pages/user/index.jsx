@@ -9,7 +9,7 @@ export default function User() {
     const navigation = useNavigation();
     const route = useRoute();
     
-    const userData = route.params?.user || { 
+    const userData = { 
         name: 'Usuário', 
         email: 'email@exemplo.com' 
     };
