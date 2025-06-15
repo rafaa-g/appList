@@ -11,8 +11,8 @@ const findTasksByUserId = async (userId) => {
     return await taskRepository.findTasksByUserId(userId);
 }
 
-const completeTaskByTaskId = async (taskId) => {
-    return await taskRepository.completeTaskByTaskId(taskId);
+const completeTaskByTaskId = async (taskId, completed) => {
+    return await taskRepository.completeTaskByTaskId(taskId, completed);
 }
 
 const deleteTaskByTaskId = async (taskId) => {

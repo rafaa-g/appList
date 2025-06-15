@@ -103,5 +103,32 @@ export const style = StyleSheet.create({
         marginTop: 20,
         color: themas.colors.gray,
         fontSize: 16,
-    }
+    },
+    cardContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1
+    },
+    checkboxContainer: {
+        marginRight: 12,
+    },
+    completedTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: themas.colors.gray,
+        textDecorationLine: 'line-through'
+    },
+    completedDescription: {
+        color: themas.colors.lightGray,
+        fontSize: 14,
+        marginTop: 4,
+        textDecorationLine: 'line-through'
+    },
+    completedDate: {
+        color: themas.colors.lightGray,
+        fontSize: 12,
+        marginTop: 4,
+        fontStyle: 'italic',
+        textDecorationLine: 'line-through'
+    },
 });

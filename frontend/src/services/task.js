@@ -49,6 +49,21 @@ export const deleteTaskService = async (id) => {
   }
 };
 
+export const completeTaskService = async (id, completed) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await api.put(
+      '/tasks/complete-task-by-taskid',
+      { id, completed }, // Envia ambos os valores
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    return response.data;
+  } catch (error) {
+    handleServiceError(error, 'Erro ao atualizar status da tarefa');
+  }
+};
+
 const handleServiceError = (error, defaultMessage) => {
   let errorMessage = defaultMessage;
   if (error.response) {

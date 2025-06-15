@@ -6,7 +6,7 @@ const createTask = async (title, description, dueDate, userId) => {
         data: {
             title,
             description,
-            dueDate, 
+            dueDate,
             userId,
         },
     });
@@ -20,16 +20,16 @@ const findTasksByUserId = async (userId) => {
     });
 };
 
-const completeTaskByTaskId = async (taskId) => {
+const completeTaskByTaskId = async (taskId, completed) => {
     return await prisma.task.update({
-        where: {
-            id: taskId
+        where: { 
+            id: taskId 
         },
-        data: {
-            completed: true
-        }
+        data: { 
+            completed 
+        },
     });
-}; 
+};
 
 const deleteTaskByTaskId = async (taskId) => {
     return await prisma.task.delete({
