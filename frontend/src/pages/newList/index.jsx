@@ -4,32 +4,41 @@ import { styles } from './styles';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { themas } from '../../global/themes';
+import { createTaskService } from '../../services/task';
 
 export default function NewList({ navigation }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (title.trim() === '' || description.trim() === '') {
       alert('Por favor, preencha todos os campos');
       return;
     }
-    
-    navigation.navigate('List', { 
-      newNote: { 
-        title, 
-        description,
-        date: date.toISOString() 
-      } 
-    });
-  };
 
-  const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(false);
-    setDate(currentDate);
+    setIsLoading(true);
+    
+    try {
+      const taskData = {
+        title: title.trim(),
+        description: description.trim(),
+        dueDate: date.toISOString()
+      };
+
+      await createTaskService(taskData);
+
+      navigation.navigate('List', { 
+        successMessage: 'Tarefa criada com sucesso!' 
+      });
+      
+    } catch (error) {
+      Alert.alert('Erro', error.message || 'Falha ao criar tarefa');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

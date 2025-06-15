@@ -17,7 +17,7 @@ export const getTasksService = async () => {
 export const createTaskService = async (task) => {
   try {
     const token = await AsyncStorage.getItem('token');
-    const response = await api.post('/tasks', task, {
+    const response = await api.post('/tasks/create-task', task, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
