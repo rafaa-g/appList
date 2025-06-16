@@ -49,17 +49,7 @@ export default function List() {
   }, [searchTerm, tasks]);
 
   const handleTaskPress = (task) => {
-    navigation.navigate('Edit', {
-      task,
-      onSave: async (updatedTask) => {
-        try {
-          await updateTaskService(updatedTask.id, updatedTask);
-          loadTasks();
-        } catch (error) {
-          Alert.alert('Erro', error.message);
-        }
-      }
-    });
+    navigation.navigate('Edit', { task });
   };
 
   const handleDelete = (id) => {

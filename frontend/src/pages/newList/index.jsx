@@ -41,6 +41,12 @@ export default function NewList({ navigation }) {
     }
   };
 
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>Nova Nota</Text>

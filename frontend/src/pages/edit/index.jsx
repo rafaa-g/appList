@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from './styles';
 import { themas } from '../../global/themes';
+import { updateTaskService } from '../../services/task';
 
 export default function Edit({ route, navigation }) {
-  const { task, onSave } = route.params;
-  
+  const { task } = route.params;
+  const [title, setTitle] = useState(task.title || '');
+  const [description, setDescription] = useState(task.description || '');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const getInitialDate = () => {
     if (task.date) {
       try {
@@ -20,24 +25,36 @@ export default function Edit({ route, navigation }) {
     return new Date();
   };
 
-  const [title, setTitle] = useState(task.title || '');
-  const [description, setDescription] = useState(task.description || '');
   const [date, setDate] = useState(getInitialDate());
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (title.trim() === '' || description.trim() === '') {
       Alert.alert('Atenção', 'Por favor, preencha todos os campos');
       return;
     }
-    
-    onSave({
-      ...task,
-      title,
-      description,
-      date: date.toISOString()
-    });
-    navigation.goBack();
+
+    setIsLoading(true);
+
+    try {
+      const formattedDate = date.toISOString().split('T')[0];
+
+      const updatedTaskData = {
+        id: task.id,
+        title: title.trim(),
+        description: description.trim(),
+        dueDate: formattedDate
+      };
+
+      console.log(updatedTaskData)
+
+      await updateTaskService(updatedTaskData);
+
+      navigation.navigate('List', { refreshed: true });
+    } catch (error) {
+      Alert.alert('Erro', 'Falha ao atualizar a tarefa: ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onChangeDate = (event, selectedDate) => {
@@ -49,7 +66,7 @@ export default function Edit({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Editar Tarefa</Text>
-      
+
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Título</Text>
         <TextInput
@@ -60,7 +77,7 @@ export default function Edit({ route, navigation }) {
           placeholderTextColor={themas.colors.gray}
         />
       </View>
-      
+
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Descrição</Text>
         <TextInput
@@ -72,20 +89,20 @@ export default function Edit({ route, navigation }) {
           multiline
         />
       </View>
-      
+
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Data</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.dateInput}
           onPress={() => setShowDatePicker(true)}
         >
           <Text style={styles.dateText}>
             {date.toLocaleDateString('pt-BR')}
           </Text>
-          <MaterialIcons 
-            name="calendar-today" 
-            size={20} 
-            color={themas.colors.primary} 
+          <MaterialIcons
+            name="calendar-today"
+            size={20}
+            color={themas.colors.primary}
           />
         </TouchableOpacity>
       </View>
@@ -104,15 +121,21 @@ export default function Edit({ route, navigation }) {
         <TouchableOpacity
           style={[styles.button, styles.cancelButton]}
           onPress={() => navigation.goBack()}
+          disabled={isLoading}
         >
           <Text style={styles.cancelButtonText}>Cancelar</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
-          style={[styles.button, styles.saveButton]}
+          style={[styles.button, styles.saveButton, isLoading && styles.disabledButton]}
           onPress={handleSave}
+          disabled={isLoading}
         >
-          <Text style={styles.saveButtonText}>Salvar</Text>
+          {isLoading ? (
+            <ActivityIndicator color={themas.colors.white} />
+          ) : (
+            <Text style={styles.saveButtonText}>Salvar</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>

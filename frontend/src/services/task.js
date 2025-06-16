@@ -26,15 +26,25 @@ export const createTaskService = async (task) => {
   }
 };
 
-export const updateTaskService = async (id, task) => {
+export const updateTaskService = async (task) => {
   try {
     const token = await AsyncStorage.getItem('token');
-    const response = await api.put(`/tasks/${id}`, task, {
+    const response = await api.put(`/tasks/update-task-by-taskid`, task, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   } catch (error) {
-    handleServiceError(error, 'Erro ao atualizar tarefa');
+    let errorMessage = 'Erro ao atualizar tarefa';
+    
+    if (error.response) {
+      if (error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message;
+      } else {
+        errorMessage = `Erro ${error.response.status}: ${error.response.statusText}`;
+      }
+    }
+    
+    throw new Error(errorMessage);
   }
 };
 
