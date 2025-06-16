@@ -6,33 +6,30 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { themas } from "../../global/themes";
 import { useNavigation } from '@react-navigation/native';
 
+import { registerService } from '../../services/auth';
+
 export default function Register() {
     const navigation = useNavigation();
-    
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    function handleRegister() {
-    try {
-        if (!name || !email || !password) {
-            return Alert.alert('Atenção', 'Preencha todos os campos!');
+    async function handleRegister() {
+        try {
+            setLoading(true);
+
+            await registerService(name, email, password);
+
+            navigation.navigate('Login');
+
+        } catch (error) {
+            Alert.alert('Erro', error.message);
+        } finally {
+            setLoading(false);
         }
-
-        navigation.reset({ 
-            routes: [{ 
-                name: "BottomRoutes", 
-                params: { 
-                    user: {name, email} 
-                } 
-            }] 
-        });
-        
-    } catch (error) {
-        console.log(error);
-        Alert.alert('Erro', 'Não foi possível realizar o cadastro');
     }
-}
 
     return (
         <View style={styles.container}>
@@ -51,6 +48,7 @@ export default function Register() {
                         style={styles.input}
                         value={name}
                         onChangeText={setName}
+                        placeholder="Digite seu nome"
                         placeholderTextColor={themas.colors.gray}
                     />
                     <MaterialIcons
@@ -67,6 +65,7 @@ export default function Register() {
                         value={email}
                         onChangeText={setEmail}
                         keyboardType="email-address"
+                        placeholder="Digite seu email"
                         placeholderTextColor={themas.colors.gray}
                     />
                     <MaterialIcons
@@ -83,6 +82,7 @@ export default function Register() {
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry
+                        placeholder="Digite sua senha"
                         placeholderTextColor={themas.colors.gray}
                     />
                     <MaterialIcons
@@ -97,7 +97,9 @@ export default function Register() {
                     style={styles.button} 
                     onPress={handleRegister}
                 >
-                    <Text style={styles.textButton}>SALVAR</Text>
+                    <Text style={styles.textButton}>
+                        {loading ? 'Salvando...' : 'SALVAR'}
+                    </Text>
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
